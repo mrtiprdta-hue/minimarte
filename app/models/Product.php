@@ -106,4 +106,53 @@ public function getProductById(int $id): ?array
 
     return $product ?: null;
 }
+
+
+public function getAllCategories(): array
+{
+    $stmt = $this->db->query(
+        "SELECT id, name FROM categories ORDER BY name ASC"
+    );
+
+    return $stmt->fetchAll();
+}
+
+public function createProduct(array $data): bool
+{
+    $sql = "
+        INSERT INTO products (
+            sku,
+            name,
+            category_id,
+            purchase_price,
+            selling_price,
+            stock,
+            unit,
+            expiry_date
+        ) VALUES (
+            :sku,
+            :name,
+            :category_id,
+            :purchase_price,
+            :selling_price,
+            :stock,
+            :unit,
+            :expiry_date
+        )
+    ";
+
+    $stmt = $this->db->prepare($sql);
+
+    return $stmt->execute([
+        'sku' => $data['sku'],
+        'name' => $data['name'],
+        'category_id' => $data['category_id'],
+        'purchase_price' => $data['purchase_price'],
+        'selling_price' => $data['selling_price'],
+        'stock' => $data['stock'],
+        'unit' => $data['unit'],
+        'expiry_date' => $data['expiry_date'] ?: null,
+    ]);
+}
+
 }

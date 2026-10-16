@@ -18,6 +18,14 @@ try {
         case 'products':
             (new ProductController($db))->index();
             break;
+            
+        case 'products-create':
+            (new ProductController($db))->create();
+            break;
+
+        case 'products-store':
+            (new ProductController($db))->store();
+            break;
 
         default:
             http_response_code(404);
