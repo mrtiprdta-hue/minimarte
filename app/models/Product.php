@@ -52,4 +52,58 @@ class Product
 
         return $this->db->query($sql)->fetchAll();
     }
+
+    
+public function getAllProducts(string $keyword = ''): array
+{
+    $sql = "
+        SELECT
+            p.id,
+            p.sku,
+            p.name,
+            p.purchase_price,
+            p.selling_price,
+            p.stock,
+            p.unit,
+            p.expiry_date,
+            c.name AS category_name
+        FROM products p
+        INNER JOIN categories c ON c.id = p.category_id
+    ";
+
+    if ($keyword !== '') {
+        $sql .= "
+            WHERE p.name LIKE :keyword
+               OR p.sku LIKE :keyword
+               OR c.name LIKE :keyword
+        ";
+    }
+
+    $sql .= " ORDER BY p.id DESC";
+
+    $stmt = $this->db->prepare($sql);
+
+    if ($keyword !== '') {
+        $stmt->execute([
+            'keyword' => '%' . $keyword . '%'
+        ]);
+    } else {
+        $stmt->execute();
+    }
+
+    return $stmt->fetchAll();
+}
+
+public function getProductById(int $id): ?array
+{
+    $stmt = $this->db->prepare(
+        "SELECT * FROM products WHERE id = :id"
+    );
+
+    $stmt->execute(['id' => $id]);
+
+    $product = $stmt->fetch();
+
+    return $product ?: null;
+}
 }

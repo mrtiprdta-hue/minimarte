@@ -416,3 +416,44 @@ body {
         flex-direction: column;
     }
 }
+
+
+.search-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.search-form input[type="search"] {
+    flex: 1;
+    min-width: 200px;
+    padding: 11px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--text);
+    font: inherit;
+    font-size: 12px;
+    outline: none;
+}
+
+.search-form input[type="search"]:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px #c6a66b22;
+}
+
+.search-form button {
+    border: none;
+    cursor: pointer;
+    font: inherit;
+}
+
+.reset-link {
+    display: inline-flex;
+    align-items: center;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    padding: 0 8px;
+}

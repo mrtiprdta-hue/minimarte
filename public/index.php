@@ -3,6 +3,7 @@
 
 require_once __DIR__ . '/../config/Database.php';
 require_once __DIR__ . '/../app/controllers/DashboardController.php';
+require_once __DIR__ . '/../app/controllers/ProductController.php';
 
 try {
     $db = (new Database())->connect();
@@ -12,6 +13,10 @@ try {
     switch ($page) {
         case 'dashboard':
             (new DashboardController($db))->index();
+            break;
+
+        case 'products':
+            (new ProductController($db))->index();
             break;
 
         default:
