@@ -155,4 +155,36 @@ public function createProduct(array $data): bool
     ]);
 }
 
+
+public function updateProduct(int $id, array $data): bool
+{
+    $sql = "
+        UPDATE products
+        SET
+            sku = :sku,
+            name = :name,
+            category_id = :category_id,
+            purchase_price = :purchase_price,
+            selling_price = :selling_price,
+            stock = :stock,
+            unit = :unit,
+            expiry_date = :expiry_date
+        WHERE id = :id
+    ";
+
+    $stmt = $this->db->prepare($sql);
+
+    return $stmt->execute([
+        'id' => $id,
+        'sku' => $data['sku'],
+        'name' => $data['name'],
+        'category_id' => $data['category_id'],
+        'purchase_price' => $data['purchase_price'],
+        'selling_price' => $data['selling_price'],
+        'stock' => $data['stock'],
+        'unit' => $data['unit'],
+        'expiry_date' => $data['expiry_date'] ?: null,
+    ]);
+}
+
 }

@@ -159,4 +159,156 @@ public function store(): void
     require __DIR__ . '/../views/layouts/footer.php';
 }
 
+
+public function edit(): void
+{
+    $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+
+    if (!$id || $id < 1) {
+        header('Location: index.php?page=products');
+        exit;
+    }
+
+    $product = $this->productModel->getProductById($id);
+
+    if (!$product) {
+        http_response_code(404);
+        echo 'Produk tidak ditemukan.';
+        return;
+    }
+
+    $form = $product;
+    $categories = $this->productModel->getAllCategories();
+    $errors = [];
+    $pageTitle = 'Edit Produk';
+
+    require __DIR__ . '/../views/layouts/header.php';
+    require __DIR__ . '/../views/products/edit.php';
+    require __DIR__ . '/../views/layouts/footer.php';
+}
+
+public function update(): void
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header('Location: index.php?page=products');
+        exit;
+    }
+
+    $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+
+    if (!$id || $id < 1) {
+        header('Location: index.php?page=products');
+        exit;
+    }
+
+    $product = $this->productModel->getProductById($id);
+
+    if (!$product) {
+        http_response_code(404);
+        echo 'Produk tidak ditemukan.';
+        return;
+    }
+
+    $form = [
+        'sku' => trim($_POST['sku'] ?? ''),
+        'name' => trim($_POST['name'] ?? ''),
+        'category_id' => trim($_POST['category_id'] ?? ''),
+        'purchase_price' => trim($_POST['purchase_price'] ?? ''),
+        'selling_price' => trim($_POST['selling_price'] ?? ''),
+        'stock' => trim($_POST['stock'] ?? ''),
+        'unit' => trim($_POST['unit'] ?? ''),
+        'expiry_date' => trim($_POST['expiry_date'] ?? ''),
+    ];
+
+    $errors = [];
+
+    if ($form['sku'] === '') {
+        $errors[] = 'SKU wajib diisi.';
+    }
+
+    if ($form['name'] === '') {
+        $errors[] = 'Nama produk wajib diisi.';
+    }
+
+    $categories = $this->productModel->getAllCategories();
+    $categoryIds = array_map(
+        'intval',
+        array_column($categories, 'id')
+    );
+
+    if (
+        filter_var($form['category_id'], FILTER_VALIDATE_INT) === false ||
+        !in_array((int) $form['category_id'], $categoryIds, true)
+    ) {
+        $errors[] = 'Pilih kategori yang valid.';
+    }
+
+    foreach (['purchase_price', 'selling_price', 'stock'] as $field) {
+        if (
+            $form[$field] === '' ||
+            !is_numeric($form[$field]) ||
+            (float) $form[$field] < 0
+        ) {
+            $errors[] = 'Harga dan stok harus berupa angka nol atau lebih.';
+            break;
+        }
+    }
+
+    if (
+        filter_var($form['stock'], FILTER_VALIDATE_INT) === false ||
+        (int) $form['stock'] < 0
+    ) {
+        $errors[] = 'Stok harus berupa bilangan bulat nol atau lebih.';
+    }
+
+    if ($form['unit'] === '') {
+        $errors[] = 'Satuan wajib diisi.';
+    }
+
+    if (
+        $form['expiry_date'] !== '' &&
+        (
+            !preg_match('/^\d{4}-\d{2}-\d{2}$/', $form['expiry_date']) ||
+            !checkdate(
+                (int) substr($form['expiry_date'], 5, 2),
+                (int) substr($form['expiry_date'], 8, 2),
+                (int) substr($form['expiry_date'], 0, 4)
+            )
+        )
+    ) {
+        $errors[] = 'Tanggal kedaluwarsa tidak valid.';
+    }
+
+    if (!$errors) {
+        try {
+            $this->productModel->updateProduct($id, [
+                'sku' => $form['sku'],
+                'name' => $form['name'],
+                'category_id' => (int) $form['category_id'],
+                'purchase_price' => $form['purchase_price'],
+                'selling_price' => $form['selling_price'],
+                'stock' => (int) $form['stock'],
+                'unit' => $form['unit'],
+                'expiry_date' => $form['expiry_date'],
+            ]);
+
+            header('Location: index.php?page=products&updated=1');
+            exit;
+        } catch (PDOException $e) {
+            if ($e->getCode() === '23000') {
+                $errors[] = 'SKU sudah digunakan atau data terkait tidak valid.';
+            } else {
+                error_log($e->getMessage());
+                $errors[] = 'Produk gagal diperbarui. Silakan coba lagi.';
+            }
+        }
+    }
+
+    $pageTitle = 'Edit Produk';
+
+    require __DIR__ . '/../views/layouts/header.php';
+    require __DIR__ . '/../views/products/edit.php';
+    require __DIR__ . '/../views/layouts/footer.php';
+}
+
 }

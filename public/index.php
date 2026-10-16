@@ -18,7 +18,7 @@ try {
         case 'products':
             (new ProductController($db))->index();
             break;
-            
+
         case 'products-create':
             (new ProductController($db))->create();
             break;
@@ -27,6 +27,14 @@ try {
             (new ProductController($db))->store();
             break;
 
+        case 'products-edit':
+            (new ProductController($db))->edit();
+            break;
+
+        case 'products-update':
+            (new ProductController($db))->update();
+            break;
+            
         default:
             http_response_code(404);
             echo 'Halaman tidak ditemukan.';

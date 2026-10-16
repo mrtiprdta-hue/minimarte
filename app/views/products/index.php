@@ -51,13 +51,14 @@
                         <th>Harga Jual</th>
                         <th>Stok</th>
                         <th>Kedaluwarsa</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
 
                 <tbody>
                 <?php if (empty($products)): ?>
                     <tr>
-                        <td colspan="7" class="empty-state">
+                        <td colspan="8" class="empty-state">
                             Produk tidak ditemukan.
                         </td>
                     </tr>
@@ -94,6 +95,13 @@
                             <td>
                                 <?php if ($product['expiry_date']): ?>
                                     <?= htmlspecialchars($product['expiry_date'], ENT_QUOTES, 'UTF-8') ?>
+
+                            <td>
+                                <a class="btn-secondary"
+                                href="index.php?page=products-edit&id=<?= (int) $product['id'] ?>">
+                                    Edit
+                                </a>
+                            </td>
                                 <?php else: ?>
                                     <span class="sku">—</span>
                                 <?php endif; ?>
