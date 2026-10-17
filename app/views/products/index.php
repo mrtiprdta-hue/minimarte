@@ -91,22 +91,43 @@
                                 <?= number_format((int) $product['stock']) ?>
                                 <?= htmlspecialchars($product['unit'], ENT_QUOTES, 'UTF-8') ?>
                             </td>
-
+                           
                             <td>
                                 <?php if ($product['expiry_date']): ?>
                                     <?= htmlspecialchars($product['expiry_date'], ENT_QUOTES, 'UTF-8') ?>
-
-                            <td>
-                                <a class="btn-secondary"
-                                href="index.php?page=products-edit&id=<?= (int) $product['id'] ?>">
-                                    Edit
-                                </a>
-                            </td>
                                 <?php else: ?>
                                     <span class="sku">—</span>
                                 <?php endif; ?>
                             </td>
+
+                            <td>
+                                <div class="product-actions">
+                                    <a
+                                        class="btn-secondary"
+                                        href="index.php?page=products-edit&id=<?= (int) $product['id'] ?>"
+                                    >
+                                        Edit
+                                    </a>
+
+                                    <form
+                                        method="POST"
+                                        action="index.php?page=products-delete"
+                                        onsubmit="return confirm('Yakin ingin menghapus produk <?= htmlspecialchars(addslashes($product['name']), ENT_QUOTES, 'UTF-8') ?>? Tindakan ini tidak dapat dibatalkan.');"
+                                    >
+                                        <input
+                                            type="hidden"
+                                            name="id"
+                                            value="<?= (int) $product['id'] ?>"
+                                        >
+
+                                        <button type="submit" class="btn-danger">
+                                            Hapus
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
                         </tr>
+
                     <?php endforeach; ?>
                 <?php endif; ?>
                 </tbody>

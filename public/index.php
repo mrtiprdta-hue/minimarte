@@ -35,6 +35,10 @@ try {
             (new ProductController($db))->update();
             break;
             
+        case 'products-delete':
+            (new ProductController($db))->delete();
+            break;
+
         default:
             http_response_code(404);
             echo 'Halaman tidak ditemukan.';

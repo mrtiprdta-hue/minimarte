@@ -311,4 +311,35 @@ public function update(): void
     require __DIR__ . '/../views/layouts/footer.php';
 }
 
+
+public function delete(): void
+{
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        header('Location: index.php?page=products');
+        exit;
+    }
+
+    $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+
+    if (!$id || $id < 1) {
+        header('Location: index.php?page=products');
+        exit;
+    }
+
+    try {
+        $deleted = $this->productModel->deleteProduct($id);
+
+        if ($deleted) {
+            header('Location: index.php?page=products&deleted=1');
+        } else {
+            header('Location: index.php?page=products&delete_failed=1');
+        }
+
+        exit;
+    } catch (PDOException $e) {
+        error_log($e->getMessage());
+        header('Location: index.php?page=products&delete_failed=1');
+        exit;
+    }
+}
 }

@@ -187,4 +187,17 @@ public function updateProduct(int $id, array $data): bool
     ]);
 }
 
+
+public function deleteProduct(int $id): bool
+{
+    $stmt = $this->db->prepare(
+        "DELETE FROM products WHERE id = :id"
+    );
+
+    $stmt->execute(['id' => $id]);
+
+    return $stmt->rowCount() > 0;
+}
+
+
 }

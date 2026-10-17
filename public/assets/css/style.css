@@ -539,3 +539,29 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+.product-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.product-actions form {
+    margin: 0;
+}
+
+.btn-danger {
+    display: inline-block;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    background: #b42318;
+    color: #ffffff;
+    font: inherit;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-danger:hover {
+    background: #8f1d14;
+}
