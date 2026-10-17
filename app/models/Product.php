@@ -199,5 +199,36 @@ public function deleteProduct(int $id): bool
     return $stmt->rowCount() > 0;
 }
 
+public function getLowStockProducts(): array
+{
+    $sql = "
+        SELECT id, sku, name, stock, unit
+        FROM products
+        WHERE stock <= 5
+        ORDER BY stock ASC, name ASC
+    ";
+
+    return $this->db->query($sql)->fetchAll();
+}
+
+public function getExpiringSoonProducts(): array
+{
+    $sql = "
+        SELECT
+            id,
+            sku,
+            name,
+            stock,
+            unit,
+            expiry_date
+        FROM products
+        WHERE expiry_date IS NOT NULL
+          AND expiry_date >= CURDATE()
+          AND expiry_date <= DATE_ADD(CURDATE(), INTERVAL 30 DAY)
+        ORDER BY expiry_date ASC, name ASC
+    ";
+
+    return $this->db->query($sql)->fetchAll();
+}
 
 }

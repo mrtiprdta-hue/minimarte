@@ -121,4 +121,135 @@ $money = static fn($value) =>
         </div>
     </section>
 
+        <!-- Peringatan Stok Menipis -->
+    <section class="panel low-stock-panel">
+        <div class="panel-heading">
+            <div>
+                <h2>⚠️ Peringatan Stok Menipis</h2>
+                <p>Produk dengan stok 5 unit atau kurang.</p>
+            </div>
+
+            <a class="btn-primary" href="index.php?page=products">
+                Kelola Produk →
+            </a>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="product-table">
+                <thead>
+                    <tr>
+                        <th>SKU</th>
+                        <th>Nama Produk</th>
+                        <th>Sisa Stok</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($lowStockProducts)): ?>
+                        <tr>
+                            <td colspan="4" class="empty-state">
+                                Semua produk memiliki stok yang cukup.
+                            </td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($lowStockProducts as $product): ?>
+                            <tr>
+                                <td>
+                                    <?= htmlspecialchars($product['sku']) ?>
+                                </td>
+                                <td>
+                                    <strong>
+                                        <?= htmlspecialchars($product['name']) ?>
+                                    </strong>
+                                </td>
+                                <td>
+                                    <?= number_format((int) $product['stock']) ?>
+                                    <?= htmlspecialchars($product['unit']) ?>
+                                </td>
+                                <td>
+                                    <span class="status-badge badge-warning">
+                                        Menipis
+                                    </span>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    
+    <!-- Peringatan Produk Segera Kedaluwarsa -->
+    <section class="panel expiring-soon-panel">
+        <div class="panel-heading">
+            <div>
+                <h2>🕒 Produk Segera Kedaluwarsa</h2>
+                <p>Produk yang kedaluwarsa dalam 30 hari ke depan.</p>
+            </div>
+
+            <a class="btn-primary" href="index.php?page=products">
+                Lihat Produk →
+            </a>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="product-table">
+                <thead>
+                    <tr>
+                        <th>SKU</th>
+                        <th>Nama Produk</th>
+                        <th>Sisa Stok</th>
+                        <th>Tanggal Kedaluwarsa</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($expiringSoonProducts)): ?>
+                        <tr>
+                            <td colspan="5" class="empty-state">
+                                Tidak ada produk yang segera kedaluwarsa.
+                            </td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($expiringSoonProducts as $product): ?>
+                            <?php
+                            $daysLeft = (int) floor(
+                                (strtotime($product['expiry_date']) - strtotime(date('Y-m-d')))
+                                / 86400
+                            );
+                            ?>
+                            <tr>
+                                <td>
+                                    <?= htmlspecialchars($product['sku']) ?>
+                                </td>
+                                <td>
+                                    <strong>
+                                        <?= htmlspecialchars($product['name']) ?>
+                                    </strong>
+                                </td>
+                                <td>
+                                    <?= number_format((int) $product['stock']) ?>
+                                    <?= htmlspecialchars($product['unit']) ?>
+                                </td>
+                                <td>
+                                    <?= date(
+                                        'd-m-Y',
+                                        strtotime($product['expiry_date'])
+                                    ) ?>
+                                </td>
+                                <td>
+                                    <span class="status-badge badge-warning">
+                                        <?= $daysLeft === 0
+                                            ? 'Kedaluwarsa hari ini'
+                                            : $daysLeft . ' hari lagi' ?>
+                                    </span>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
 </section>

@@ -16,7 +16,9 @@ class DashboardController
     {
         $stats = $this->productModel->getDashboardStats();
         $recentProducts = $this->productModel->getRecentProducts();
-
+        $lowStockProducts = $this->productModel->getLowStockProducts();
+        $expiringSoonProducts = $this->productModel->getExpiringSoonProducts();
+        
         $pageTitle = 'Dashboard';
 
         require __DIR__ . '/../views/layouts/header.php';
