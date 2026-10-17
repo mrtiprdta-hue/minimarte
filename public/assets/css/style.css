@@ -565,3 +565,74 @@ body {
 .btn-danger:hover {
     background: #8f1d14;
 }
+
+/* Stock Management - MINIMARTÉ */
+
+.stock-form {
+    display: grid;
+    gap: 12px;
+}
+
+.stock-form label {
+    color: #263247;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.stock-form input,
+.stock-form select,
+.stock-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 12px;
+    border: 1px solid #ddd8cd;
+    border-radius: 8px;
+    background: #fff;
+    color: #263247;
+    font: inherit;
+}
+
+.stock-form input:focus,
+.stock-form select:focus,
+.stock-form textarea:focus {
+    outline: 2px solid #d6b56d;
+    outline-offset: 1px;
+}
+
+.stock-form textarea {
+    resize: vertical;
+}
+
+.stock-form button {
+    justify-self: start;
+    margin-top: 6px;
+}
+
+.alert {
+    padding: 12px 16px;
+    margin-bottom: 18px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.alert-success {
+    background: #e8f3e9;
+    color: #24643a;
+    border: 1px solid #c8e3cd;
+}
+
+.alert-error {
+    background: #fff0ed;
+    color: #a12b20;
+    border: 1px solid #f1c9c2;
+}
+
+@media (max-width: 640px) {
+    .stock-form button {
+        width: 100%;
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+    }
+}
