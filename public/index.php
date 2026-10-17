@@ -5,6 +5,7 @@ require_once __DIR__ . '/../config/Database.php';
 require_once __DIR__ . '/../app/controllers/DashboardController.php';
 require_once __DIR__ . '/../app/controllers/ProductController.php';
 require_once __DIR__ . '/../app/controllers/StockController.php';
+require_once __DIR__ . '/../app/controllers/CategoryController.php';
 
 try {
     $db = (new Database())->connect();
@@ -48,6 +49,26 @@ try {
             (new StockController($db))->store();
             break;
 
+        case 'categories':
+            (new CategoryController($db))->index();
+            break;
+
+        case 'categories-store':
+            (new CategoryController($db))->store();
+            break;
+
+        case 'categories-edit':
+            (new CategoryController($db))->edit();
+            break;
+
+        case 'categories-update':
+            (new CategoryController($db))->update();
+            break;
+
+        case 'categories-delete':
+            (new CategoryController($db))->delete();
+            break;
+            
         default:
             http_response_code(404);
             echo 'Halaman tidak ditemukan.';
